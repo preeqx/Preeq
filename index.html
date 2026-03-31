@@ -2,43 +2,212 @@
 <html lang="tr">
 <head>
   <meta charset="UTF-8">
-  <title>Preeqbs Sitesi</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Preeqbs Dashboard</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;600;800&display=swap" rel="stylesheet">
   <style>
-    body { background-color: #0d0d0d; color: #b300ff; font-family: Arial, sans-serif; text-align: center; }
-    h1 { margin-top: 20px; }
-    .link-kart { background-color: #1a1a1a; border-radius: 15px; padding: 20px; margin: 20px auto; width: 300px; color: white; }
-    .btn { background-color: #007bff; color: white; border: none; padding: 10px 20px; border-radius: 8px; cursor: pointer; margin-top: 10px; }
-    #siteAyarlar { margin-top: 50px; cursor: pointer; color: #ff00ff; }
+    :root {
+      --primary: #10b981; /* Zümrüt Yeşili */
+      --secondary: #0ea5e9; /* Elektrik Mavisi */
+      --bg-dark: #020617; /* Gece Siyahı */
+      --glass: rgba(15, 23, 42, 0.8);
+      --border: rgba(16, 185, 129, 0.2);
+      --text: #f0fdf4;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Plus Jakarta Sans', sans-serif; }
+
+    body { 
+      background: radial-gradient(circle at top left, #064e3b, #020617 40%),
+                  radial-gradient(circle at bottom right, #082f49, #020617 40%);
+      background-attachment: fixed;
+      color: var(--text); 
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 50px 20px;
+    }
+
+    .container { width: 100%; max-width: 1100px; text-align: center; flex: 1; }
+
+    h1 { 
+      font-size: 2.8rem; 
+      font-weight: 800; 
+      margin-bottom: 15px;
+      background: linear-gradient(to right, #fff, var(--primary), var(--secondary));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      letter-spacing: -0.5px;
+      filter: drop-shadow(0 0 10px rgba(16, 185, 129, 0.3));
+    }
+
+    .stats { color: #64748b; font-size: 0.9rem; margin-bottom: 30px; text-transform: uppercase; letter-spacing: 2px; }
+
+    .search-container {
+      margin-bottom: 40px;
+      max-width: 500px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .search-input {
+      width: 100%;
+      padding: 15px 25px;
+      border-radius: 16px;
+      border: 1px solid var(--border);
+      background: var(--glass);
+      color: white;
+      outline: none;
+      backdrop-filter: blur(10px);
+      transition: 0.3s;
+    }
+    .search-input:focus { 
+      border-color: var(--primary); 
+      box-shadow: 0 0 20px rgba(16, 185, 129, 0.2);
+    }
+
+    #linkler {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .link-kart { 
+      background: var(--glass);
+      backdrop-filter: blur(20px);
+      border: 1px solid var(--border);
+      border-radius: 20px; 
+      padding: 30px; 
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .link-kart:hover { 
+      transform: scale(1.03); 
+      border-color: var(--primary);
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5), 0 0 15px rgba(16, 185, 129, 0.1);
+    }
+
+    .link-kart h2 { margin-bottom: 25px; font-size: 1.3rem; color: #e2e8f0; }
+
+    .btn-link { 
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      background: linear-gradient(135deg, var(--primary), var(--secondary));
+      color: #020617; 
+      text-decoration: none;
+      padding: 12px; 
+      border-radius: 12px; 
+      font-weight: 700;
+      transition: 0.3s;
+    }
+
+    .btn-link:hover { filter: brightness(1.2); letter-spacing: 1px; }
+
+    .footer-tools { margin-top: 60px; padding-bottom: 30px; }
+
+    .tool-btn {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid #1e293b;
+      color: #64748b;
+      padding: 10px 25px;
+      border-radius: 12px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      transition: 0.3s;
+    }
+
+    .tool-btn:hover { color: var(--primary); border-color: var(--primary); }
   </style>
 </head>
 <body>
-  <h1>Hoşgeldin Preeqbs</h1>
-  <div id="linkler"></div>
-  <div id="siteAyarlar" onclick="siteAyarlarıPanel()">⚙️ Site Ayarları</div>
+
+  <div class="container">
+    <h1>Preeqbs Sitesine Hoşgeldiniz</h1>
+    <div class="stats" id="linkSayaci">Sistem Hazırlanıyor...</div>
+
+    <div class="search-container">
+      <input type="text" id="aramaKutusu" class="search-input" placeholder="Hızlı erişim..." onkeyup="aramaYap()">
+    </div>
+    
+    <div id="linkler"></div>
+  </div>
+
+  <div class="footer-tools">
+    <button class="tool-btn" onclick="siteAyarlarıPanel()">
+      <i class="fas fa-terminal"></i> Kontrol Paneli
+    </button>
+  </div>
 
   <script>
-    let linkler = [{ isim: "Google", url: "https://www.google.com" }];
-    let adminŞifre = "preeq198568381985";
+    let linkler = JSON.parse(localStorage.getItem("preeq_pro_linkler")) || [];
+    const adminŞifre = "preeq198568381985";
+
+    function aramaYap() {
+      let input = document.getElementById('aramaKutusu').value.toLowerCase();
+      let kartlar = document.getElementsByClassName('link-kart');
+      for (let kart of kartlar) {
+        let baslik = kart.querySelector('h2').innerText.toLowerCase();
+        kart.style.display = baslik.includes(input) ? "" : "none";
+      }
+    }
 
     function renderLinkler() {
-      let container = document.getElementById("linkler");
+      const container = document.getElementById("linkler");
       container.innerHTML = "";
-      linkler.forEach((link, index) => {
-        let kart = document.createElement("div");
+
+      if (linkler.length === 0) {
+        container.innerHTML = "<p style='grid-column: 1/-1; color: #475569;'>Kontrol Paneli üzerinden ilk linkini ekle.</p>";
+      }
+
+      linkler.forEach((link) => {
+        let url = link.url.startsWith('http') ? link.url : 'https://' + link.url;
+        const kart = document.createElement("div");
         kart.className = "link-kart";
-        kart.innerHTML = `<h2>${link.isim}</h2><button class="btn" onclick="window.open('${link.url}', '_blank')">Git</button>`;
+        kart.innerHTML = `
+          <h2>${link.isim}</h2>
+          <a href="${url}" target="_blank" class="btn-link">AÇ</a>
+        `;
         container.appendChild(kart);
       });
+
+      document.getElementById("linkSayaci").innerText = `${linkler.length} BAĞLANTI AKTİF`;
+      localStorage.setItem("preeq_pro_linkler", JSON.stringify(linkler));
     }
 
     function siteAyarlarıPanel() {
-      let sifre = prompt("Admin şifresini giriniz:");
-      if (sifre === adminŞifre) {
-        let işlem = prompt("1-Ekle, 2-Sil, 3-Düzenle");
-        // İşlem mantığı buraya gelir...
-        renderLinkler();
+      const sifre = prompt("Güvenlik Anahtarı:");
+      if (sifre !== adminŞifre) return alert("Erişim Reddedildi.");
+
+      const islem = prompt("KONTROL:\n1: Ekle\n2: Sil\n3: Düzenle\n4: Sıfırla");
+
+      if (islem === "1") {
+        const ad = prompt("Başlık:");
+        const url = prompt("URL:");
+        if (ad && url) linkler.push({ isim: ad, url: url });
+      } 
+      else if (islem === "2") {
+        const sil = prompt("Silinecek isim:");
+        if(sil) linkler = linkler.filter(l => l.isim.toLowerCase() !== sil.toLowerCase());
+      } 
+      else if (islem === "3") {
+        const hedef = prompt("Hangi site?");
+        const idx = linkler.findIndex(l => l.isim.toLowerCase() === (hedef ? hedef.toLowerCase() : ""));
+        if (idx !== -1) {
+          linkler[idx].isim = prompt("Yeni İsim:", linkler[idx].isim) || linkler[idx].isim;
+          linkler[idx].url = prompt("Yeni URL:", linkler[idx].url) || linkler[idx].url;
+        }
       }
+      else if (islem === "4") {
+        if(confirm("Tüm veriler silinsin mi?")) linkler = [];
+      }
+
+      renderLinkler();
     }
+
     renderLinkler();
   </script>
 </body>
